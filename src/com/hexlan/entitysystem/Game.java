@@ -1,5 +1,8 @@
 package com.hexlan.entitysystem;
 
+import com.hexlan.entitysystem.gamestates.GameStateManager;
+import com.hexlan.entitysystem.systems.SystemManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,11 +20,15 @@ public class Game  extends JPanel implements Runnable{
     private BufferedImage image;
     private Graphics2D g;
 
-    public Game() {
-
-    }
+    private InputHandler input;
+    private GameStateManager gameStateManager;
+    private SystemManager systemManager;
 
     public void start() {
+        input = new InputHandler(this);
+        systemManager = new SystemManager();
+        gameStateManager = new GameStateManager(input, systemManager);
+
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         g = (Graphics2D)image.getGraphics();
 
@@ -50,12 +57,18 @@ public class Game  extends JPanel implements Runnable{
     }
 
     public void update() {
+        gameStateManager.update();
+        systemManager.update();
 
+        input.update();
     }
 
     public void draw() {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
+
+        gameStateManager.draw(g);
+        systemManager.draw(g);
 
         Graphics g2 = this.getGraphics();
         g2.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
