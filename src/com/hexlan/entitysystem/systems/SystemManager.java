@@ -1,46 +1,51 @@
 package com.hexlan.entitysystem.systems;
 
+import com.hexlan.entitysystem.components.Component;
 import com.hexlan.entitysystem.entity.Entity;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SystemManager {
 
-    RenderSystem renderSystem;
+    Set<GameSystem> systems;
 
     public SystemManager() {
-        renderSystem = new RenderSystem(this);
+        systems = new HashSet<>();
+        systems.add(new RenderSystem(this));
     }
 
-    public void componentAdded(Entity entity) {
-        boolean hasComponents = true;
-        for(int componentType : renderSystem.getNeededComponents()) {
-            if(entity.components.containsKey(componentType)) {continue;}
-            hasComponents = false;
-            break;
-        }
-
-        if(hasComponents) { renderSystem.registerEntity(entity); }
-    }
-
-    public void componentRemoved(Entity entity) {
-        if(renderSystem.entities.containsKey(entity.ID)) {
-            boolean componentRemoved = false;
-            for(int componentType : renderSystem.getNeededComponents()) {
-                if(entity.components.containsKey(componentType)) {
-                    componentRemoved = true;
-                    break;
+    public void componentAdded(Entity entity, int componentType) {
+        for(GameSystem system : systems) {
+            if(system.needsComponent(componentType)) {
+                if(system.hasComponents(entity)){
+                    system.registerEntity(entity);
                 }
             }
-            if(componentRemoved) { renderSystem.unregisterEntity(entity); }
+        }
+    }
+
+    public void componentRemoved(Entity entity, int componentType) {
+
+        for(GameSystem system : systems) {
+            if(system.needsComponent(componentType)) {
+                if(system.hasComponents(entity)){
+                    system.unregisterEntity(entity);
+                }
+            }
         }
     }
 
     public void update() {
-        renderSystem.update();
+        for(GameSystem system : systems) {
+            system.update();
+        }
     }
 
     public void draw(Graphics2D g) {
-        renderSystem.draw(g);
+        for(GameSystem system : systems) {
+            system.draw(g);
+        }
     }
 }

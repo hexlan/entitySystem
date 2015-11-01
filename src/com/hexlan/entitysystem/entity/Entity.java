@@ -25,14 +25,14 @@ public class Entity {
     public void addComponent(Component componentToAdd) {
         if(!components.containsKey(componentToAdd.componentType)) {
             components.put(componentToAdd.componentType, componentToAdd);
-            systemManager.componentAdded(this);
+            systemManager.componentAdded(this, componentToAdd.componentType);
         }
     }
 
     public void removeComponent(int componentType) {
         if(components.containsKey(componentType)) {
             components.remove(componentType);
-            systemManager.componentRemoved(this);
+            systemManager.componentRemoved(this, componentType);
         }
     }
 
@@ -40,5 +40,6 @@ public class Entity {
         System.out.println("Components:");
         if(components.containsKey(0)) { System.out.println("\tPositionComponent");}
         if(components.containsKey(1)) { System.out.println("\tImageComponent");}
+        if(components.containsKey(2)) { System.out.println("\tRenderOrderComponent");}
     }
 }

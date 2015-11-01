@@ -1,26 +1,32 @@
 package com.hexlan.entitysystem.systems;
 
 import com.hexlan.entitysystem.entity.Entity;
+import com.hexlan.entitysystem.components.Component;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameSystem {
-    Map<Long, Entity> entities;
+    protected Set<Entity> entities;
+    protected Set<Integer> neededComponents;
 
     public GameSystem() {
-        entities = new HashMap<>();
-        System.out.println("Entity Count: "+entities.size());
+        entities = new HashSet<>();
+        neededComponents = new HashSet<>();
     }
 
-    public void registerEntity(Entity entity) {
-        entities.put(entity.ID, entity);
+    public boolean hasComponents(Entity entity) {
+        for(int key : entity.components.keySet()) {
+             if(!neededComponents.contains(entity.components.get(key).componentType)) return false;
+        }
+
+        return true;
     }
 
-    public void unregisterEntity(Entity entity) {
-        entities.remove(entity.ID);
-    }
+    public boolean needsComponent(int componentType) { return neededComponents.contains(componentType); }
+    public void registerEntity(Entity entity) { entities.add(entity); }
+    public void unregisterEntity(Entity entity) { entities.remove(entity); }
 
     public void update() {}
     public void draw(Graphics2D g) {}
