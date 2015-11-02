@@ -2,6 +2,7 @@ package com.hexlan.entitysystem.gamestates;
 
 import com.hexlan.entitysystem.Game;
 import com.hexlan.entitysystem.InputHandler;
+import com.hexlan.entitysystem.components.ComponentType;
 import com.hexlan.entitysystem.components.ImageComponent;
 import com.hexlan.entitysystem.components.PositionComponent;
 import com.hexlan.entitysystem.components.RenderOrderComponent;
@@ -58,7 +59,7 @@ public class TestState implements GameState {
 
     @Override
     public void update() {
-        if(input.up.isPressed()) { entities.get(0).removeComponent(0); }
+        if(input.up.isPressed()) { entities.get(0).removeComponent(ComponentType.POSITION); }
         if(input.down.isPressed()) { entities.get(0).print(); }
         if(input.left.isPressed()) {
             entities.get(0).addComponent(new PositionComponent(50, 50));

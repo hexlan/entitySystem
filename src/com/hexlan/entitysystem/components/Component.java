@@ -1,5 +1,8 @@
 package com.hexlan.entitysystem.components;
 
-public class Component {
-    public int componentType;
+public abstract class Component {
+    public ComponentType componentType;
+    public String componentName;
+
+    public abstract void print();
 }

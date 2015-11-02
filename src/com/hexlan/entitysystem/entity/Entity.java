@@ -1,6 +1,7 @@
 package com.hexlan.entitysystem.entity;
 
 import com.hexlan.entitysystem.components.Component;
+import com.hexlan.entitysystem.components.ComponentType;
 import com.hexlan.entitysystem.systems.SystemManager;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ public class Entity {
     public static long currentEntityID = 0;
     public long ID;
 
-    public Map<Integer, Component> components;
+    public Map<ComponentType, Component> components;
 
     SystemManager systemManager;
 
@@ -29,7 +30,7 @@ public class Entity {
         }
     }
 
-    public void removeComponent(int componentType) {
+    public void removeComponent(ComponentType componentType) {
         if(components.containsKey(componentType)) {
             components.remove(componentType);
             systemManager.componentRemoved(this, componentType);
@@ -38,8 +39,6 @@ public class Entity {
 
     public void print() {
         System.out.println("Components:");
-        if(components.containsKey(0)) { System.out.println("\tPositionComponent");}
-        if(components.containsKey(1)) { System.out.println("\tImageComponent");}
-        if(components.containsKey(2)) { System.out.println("\tRenderOrderComponent");}
+        components.values().forEach(component -> component.print());
     }
 }
